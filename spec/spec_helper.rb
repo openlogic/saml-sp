@@ -1,6 +1,9 @@
 
 require File.expand_path(
-    File.join(File.dirname(__FILE__), %w[.. lib saml-rp]))
+    File.join(File.dirname(__FILE__), "../lib/saml_rp"))
+
+require 'rubygems'
+require 'spec'
 
 Spec::Runner.configure do |config|
   # == Mock Framework
