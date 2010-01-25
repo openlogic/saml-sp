@@ -152,6 +152,4 @@ describe Saml2::Assertion do
     end
   end
 
-  
-
 end

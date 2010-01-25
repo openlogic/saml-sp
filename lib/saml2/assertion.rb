@@ -1,13 +1,16 @@
 require 'nokogiri'
 
 module Saml2
+  class InvalidAssertionError < ArgumentError
+  end
+
   class Assertion
     module Parsing
       def self.item(name, xpath)
         module_eval(<<-ITEM_METH)
         def #{name}_from(node)
           target_node = node.at('#{xpath}')
-          raise "#{name} missing (xpath: `#{xpath}`)" unless target_node
+          raise InvalidAssertionError, "#{name} missing (xpath: `#{xpath}`)" unless target_node
           
           target_node.content.strip
         end
@@ -21,7 +24,7 @@ module Saml2
 
       def each_attribute_node_from(doc, &blk)
         attribute_nodes = doc.search('//asrt:Assertion/asrt:AttributeStatement/asrt:Attribute')
-        raise 'No attributes found' if attribute_nodes.empty?
+        raise InvalidAssertionError, 'No attributes found' if attribute_nodes.empty?
         
         attribute_nodes.each &blk
       end                          
@@ -56,13 +59,6 @@ module Saml2
     protected
     
     attr_reader :attributes
-
-
-    def self.content_of(xpath, node)
-      cn = node.at(xpath)
-      raise "missing node `#{xpath}`" unless cn
-      cn.content
-    end
 
   end
 end
