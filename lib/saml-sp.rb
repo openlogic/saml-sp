@@ -31,5 +31,7 @@ module SamlSp
 
 end  # module SamlSp
 
+require 'rubygems'
 require 'saml2/type4_artifact'
+require 'saml2/assertion'
 

@@ -1,9 +1,10 @@
 
-require File.expand_path(
-    File.join(File.dirname(__FILE__), "../lib/saml-sp"))
+$LOAD_PATH << File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
 
-require 'rubygems'
+require 'saml-sp'
+
 require 'spec'
+require 'pp'
 
 Spec::Runner.configure do |config|
   # == Mock Framework

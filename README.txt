@@ -13,6 +13,8 @@ This library provides parsing of SAML 2.0 artifacts.  For example.
     artifact = Saml2::Type4Artifact.new_from_string(params['SAMLart'])  # => #<Saml2::Type4Artifact ...>
     artifact.source_id                                                  # => 'a314Xc8KaSd4fEJAd8R'
     artifact.type_code                                                  # => 4
+    
+    
 
 ## REQUIREMENTS:
 
