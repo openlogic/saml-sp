@@ -8,12 +8,11 @@ Support for being a SAML 2.0 service provider.
 
 ## SYNOPSIS:
 
-This library provides parsing of SAML 2.0 artifacts and assertions.
+This library provides parsing of SAML 2.0 artifacts.  For example.
     
-    artifact = Saml2::Type4Artifact.new_from_string(params['SAMLart'])  #=> #<Saml2::Type4Artifact ...>
-    
-    assertion = Saml2::Assertion.new_from_artifact(resolver_uri, artifact)
-
+    artifact = Saml2::Type4Artifact.new_from_string(params['SAMLart'])  # => #<Saml2::Type4Artifact ...>
+    artifact.source_id                                                  # => 'a314Xc8KaSd4fEJAd8R'
+    artifact.type_code                                                  # => 4
 
 ## REQUIREMENTS:
 
