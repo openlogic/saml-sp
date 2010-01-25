@@ -40,4 +40,18 @@ describe Saml2::Type4Artifact do
       @artifact.message_handle.should == 'abcdefghijklmnopqrst'
     end
   end
+
+  describe "simple artifact" do 
+    before do 
+      @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
+    end
+
+    it "should be able to render itself to a string" do 
+      @artifact.to_s.should == "AAQAADAxMjM0NTY3ODkwMTIzNDU2Nzg5YWJjZGVmZ2hpamtsbW5vcHFyc3Q=" 
+    end
+
+    it "should be able to resolve itself" do 
+      @artifact.resolve.should be_kind_of(Saml2::Assertion)
+    end
+  end
 end
