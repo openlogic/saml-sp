@@ -1,5 +1,5 @@
 
-module SamlRp
+module SamlSp
 
   # :stopdoc:
   VERSION = '1.0.0'
@@ -29,7 +29,7 @@ module SamlRp
     args.empty? ? PATH : ::File.join(PATH, args.flatten)
   end
 
-end  # module SamlRp
+end  # module SamlSp
 
-require 'saml2/artifact'
+require 'saml2/type4_artifact'
 

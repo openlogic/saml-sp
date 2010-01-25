@@ -1,6 +1,6 @@
 
 require File.expand_path(
-    File.join(File.dirname(__FILE__), "../lib/saml_rp"))
+    File.join(File.dirname(__FILE__), "../lib/saml-sp"))
 
 require 'rubygems'
 require 'spec'

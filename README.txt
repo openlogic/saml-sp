@@ -1,29 +1,33 @@
-saml-rp
+saml-sp
     by OpenLogic
     http://openlogic.com
 
-== DESCRIPTION:
+## DESCRIPTION:
 
-Support for parsing SAML 2.0 artifacts and assertions
+Support for being a SAML 2.0 service provider.
 
-== SYNOPSIS:
+## SYNOPSIS:
+
+This library provides parsing of SAML 2.0 artifacts and assertions.
+    
+    artifact = Saml2::Type4Artifact.new_from_string(params['SAMLart'])  #=> #<Saml2::Type4Artifact ...>
+    
+    assertion = Saml2::Assertion.new_from_artifact(resolver_uri, artifact)
 
 
-
-
-== REQUIREMENTS:
+## REQUIREMENTS:
 
 * Nokogiri
 
-== INSTALL:
+## INSTALL:
 
-* sudo gem install saml-rp
+* sudo gem install saml-sp
 
-== LICENSE:
+## LICENSE:
 
 (The MIT License)
 
-Copyright (c) 2010
+Copyright (c) 2010 OpenLogic
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

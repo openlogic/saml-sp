@@ -1,0 +1,2 @@
+class UnexpectedTypeCodeError < StandardError
+end

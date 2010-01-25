@@ -6,17 +6,17 @@ rescue LoadError
 end
 
 ensure_in_path 'lib'
-require 'saml_rp'
+require 'saml-sp'
 
 task :default => 'test:run'
 task 'gem:release' => 'test:run'
 
 Bones {
-  name     'saml-rp'
+  name     'saml-sp'
   authors  'Peter Williams'
   email    'pezra@barleyenough.org'
   url      'http://barelyenough.org'
-  version  SamlRp::VERSION
+  version  SamlSp::VERSION
 }
 
 require 'spec/rake/spectask'
