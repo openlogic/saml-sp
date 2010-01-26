@@ -32,7 +32,13 @@ module Saml2
     extend Parsing
 
     def self.new_from_xml(xml_assertion)
-      doc = Nokogiri::XML.parse(xml_assertion)
+      doc = case xml_assertion
+            when Nokogiri::XML::Node
+              xml_assertion
+            else
+              Nokogiri::XML.parse(xml_assertion)
+            end
+
       doc.root.add_namespace_definition('asrt', 'urn:oasis:names:tc:SAML:2.0:assertion')
 
       attrs = Hash.new

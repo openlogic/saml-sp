@@ -5,6 +5,7 @@ require 'saml-sp'
 
 require 'spec'
 require 'pp'
+require 'fakeweb'
 
 Spec::Runner.configure do |config|
   # == Mock Framework
