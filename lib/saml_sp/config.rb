@@ -3,8 +3,16 @@ module SamlSp
   end
 
   class Config
-    def interpret(config)
-      instance_eval config
+    def self.load_file(filename)
+      new.interpret File.read(filename), filename
+    end
+
+    def interpret(config, filename = nil)
+      if filename
+        instance_eval config, filename
+      else
+        instance_eval config
+      end
     end
 
     def artifact_resolution_service(&blk)

@@ -1,10 +1,36 @@
 require File.join(File.dirname(__FILE__), '../spec_helper')
+require 'tempfile'
 
 describe SamlSp::Config do 
   before do 
     @dsl = SamlSp::Config.new
   end
-  
+
+  describe "loading from file" do
+    before do 
+      @source_id = Time.now.xmlschema(10)
+
+      @tmpfile = Tempfile.open('saml-sp-config') 
+      @tmpfile << <<-CONFIG
+          artifact_resolution_service {
+            source_id "#{@source_id}"
+            uri       "http://idp.invalid/resolve-artifacts"
+          }
+        CONFIG
+      @tmpfile.flush
+    end
+
+    after do 
+      @tmpfile.close!
+    end
+
+    it "should build resolver" do 
+      SamlSp::Config.load_file(@tmpfile.path)
+
+      Saml2::ArtifactResolver(@source_id).should be_kind_of(Saml2::ArtifactResolver)
+    end
+  end
+
   describe "valid basic auth'd service description" do 
     before do 
       @dsl = SamlSp::Config.new
