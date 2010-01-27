@@ -43,7 +43,7 @@ module Saml2
     # @return [Saml2::Assertion] the assertion to which the artifact
     #   is a reference
     def resolve
-#      Saml2::ArtifactResolver(source_id).resolve(self)
+      Saml2::ArtifactResolver(source_id).resolve(self)
     end
   end
 end

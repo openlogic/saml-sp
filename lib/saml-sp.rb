@@ -29,10 +29,15 @@ module SamlSp
     args.empty? ? PATH : ::File.join(PATH, args.flatten)
   end
 
+  autoload :Config,    'saml_sp/config'
 end  # module SamlSp
 
 require 'rubygems'
-require 'saml2/type4_artifact'
-require 'saml2/assertion'
-require 'saml2/basic_auth_artifact_resolver'
+
+module Saml2
+  autoload :Type4Artifact,             'saml2/type4_artifact'
+  autoload :Assertion,                 'saml2/assertion'
+  autoload :ArtifactResolver,          'saml2/artifact_resolver'
+  autoload :BasicAuthArtifactResolver, 'saml2/basic_auth_artifact_resolver'
+end
 

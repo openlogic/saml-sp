@@ -1,10 +1,28 @@
 require File.join(File.dirname(__FILE__), '../spec_helper')
 
-describe Saml2::BasicAuthArtifactResolver do 
+describe Saml2::ArtifactResolver do 
+  describe "lookups" do 
+    before do 
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service')
+    end
+
+    it "should have pseudo-class lookup method" do 
+      Saml2::ArtifactResolver('a-source-id').should == @resolver
+    end
+
+    it "should raise error when resolver is not found" do 
+      lambda {
+        Saml2::ArtifactResolver('not-a-known-source-id')
+      }.should raise_error Saml2::NoSuchResolverError
+    end
+  end
+
+
   describe "successfully resolving artifact" do 
     before do 
-      @resolver = Saml2::BasicAuthArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service',
-                                                       'myuserid', 'mypasswd', 'myrealm')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service')
+      @resolver.basic_auth_credentials('myuserid', 'mypasswd', 'myrealm')
+
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
       FakeWeb.register_uri(:post, 'https://idp.invalid/resolution-service', :body => SUCCESSFUL_SAML_RESP)
     end
@@ -21,8 +39,9 @@ describe Saml2::BasicAuthArtifactResolver do
 
   describe "denied artifact resolution request" do 
     before do 
-      @resolver = Saml2::BasicAuthArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service',
-                                                       'myuserid', 'mypasswd', 'myrealm')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service')
+      @resolver.basic_auth_credentials('myuserid', 'mypasswd', 'myrealm')
+
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
       FakeWeb.register_uri(:post, 'https://idp.invalid/resolution-service', :body => DENIED_SAML_RESP)
     end
@@ -33,8 +52,6 @@ describe Saml2::BasicAuthArtifactResolver do
       }.should raise_error(Saml2::RequestDeniedError)
     end
   end
-
-
 
 
   SUCCESSFUL_SAML_RESP = <<-SAML_RESP

@@ -43,6 +43,8 @@ describe Saml2::Type4Artifact do
 
   describe "simple artifact" do 
     before do 
+      @resolver = Saml2::ArtifactResolver.new('01234567890123456789', 'http://idp.invalid/artifact-resolver')
+
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
     end
 
@@ -51,7 +53,8 @@ describe Saml2::Type4Artifact do
     end
 
     it "should be able to resolve itself" do 
-      @artifact.resolve.should be_kind_of(Saml2::Assertion)
+      @resolver.should_receive(:resolve).with(@artifact).and_return(:assertion_marker)
+      @artifact.resolve.should == :assertion_marker
     end
   end
 end
