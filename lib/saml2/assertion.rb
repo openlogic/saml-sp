@@ -31,6 +31,24 @@ module Saml2
     end
     extend Parsing
 
+    # Resolves an artifact into the Assertion it represents
+    #
+    # @param [Saml2::Type4Artifact, String] artifact The artifact to
+    #   resolve
+    #
+    # @return [Saml2::Assertion] The assertion represented by
+    #   specified artifact
+    def self.new_from_artifact(artifact)
+      artifact = if artifact.respond_to? :resolve
+                   artifact
+                 else
+                   Type4Artifact.new_from_string(artifact)
+                 end
+      
+
+      artifact.resolve
+    end
+
     def self.new_from_xml(xml_assertion)
       doc = case xml_assertion
             when Nokogiri::XML::Node

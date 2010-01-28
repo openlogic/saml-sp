@@ -31,6 +31,22 @@ describe Saml2::Assertion do
     end
   end
 
+  describe "instantiation" do 
+    it 'should be creatable from artifact string' do 
+      mock_artifact = mock('artifact', :resolve => :assertion_marker)
+      Saml2::Type4Artifact.should_receive(:new_from_string).with('artifact_marker').and_return(mock_artifact)
+
+      Saml2::Assertion.new_from_artifact("artifact_marker").should == :assertion_marker
+    end
+
+    it 'should be creatable from a type 4 artifact' do 
+      artifact = Saml2::Type4Artifact.new(0, 'a-source-id', 'http://idp.invalid/')
+      artifact.should_receive(:resolve).and_return(:assertion_marker)
+
+      Saml2::Assertion.new_from_artifact(artifact).should == :assertion_marker
+    end
+  end
+
   describe "parsing" do 
     before do 
       @assertion_xml = <<-XML
