@@ -3,7 +3,11 @@ module SamlSp
   end
 
   class Config
+    include Logging
+
     def self.load_file(filename)
+      logger.info "Loading config file '#{filename}'"
+
       new.interpret File.read(filename), filename
     end
 

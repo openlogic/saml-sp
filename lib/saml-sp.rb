@@ -1,3 +1,4 @@
+require 'logger'
 
 module SamlSp
 
@@ -28,6 +29,36 @@ module SamlSp
   def self.path( *args )
     args.empty? ? PATH : ::File.join(PATH, args.flatten)
   end
+
+  # Logger that does nothing
+  BITBUCKET_LOGGER =  Logger.new(nil)
+  class << BITBUCKET_LOGGER
+    def add(*args)
+    end
+  end
+
+  # The logger saml-sp should use
+  def self.logger
+    @@logger ||= BITBUCKET_LOGGER
+  end
+
+  # Set the logger for saml-sp
+  def self.logger=(a_logger)
+    @@logger = a_logger
+  end
+  
+  module Logging
+    def logger
+      SamlSp.logger
+    end
+    
+    def self.included(base)
+      base.extend(self)
+    end
+  end
+
+
+  
 
   autoload :Config,    'saml_sp/config'
 end  # module SamlSp

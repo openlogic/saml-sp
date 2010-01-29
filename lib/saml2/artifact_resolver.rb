@@ -80,8 +80,12 @@ module Saml2
   end
 
   ArtifactResolverRegistry = Class.new do
+    include SamlSp::Logging
+
     def register(resolver)
       resolvers_table[resolver.source_id] = resolver
+
+      logger.info "Resolver for source '#{resolver.source_id}' registered"
     end
     
     def lookup_by_source_id(source_id)

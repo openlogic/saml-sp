@@ -1,4 +1,5 @@
 require 'nokogiri'
+require 'saml2/artifact_resolver'
 
 module Saml2
   class InvalidAssertionError < ArgumentError
