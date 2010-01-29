@@ -85,7 +85,7 @@ module Saml2
     def register(resolver)
       resolvers_table[resolver.source_id] = resolver
 
-      logger.info "Resolver for source '#{resolver.source_id}' registered"
+      logger.info "saml-sp: Resolver for source '#{resolver.source_id}' registered"
     end
     
     def lookup_by_source_id(source_id)
