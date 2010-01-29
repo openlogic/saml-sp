@@ -9,3 +9,5 @@
 
 * Added issuer verification to artifact resolution to protect against
   spoofing.
+* Removed attempt to load config file from non-existent directory for
+  Rails apps.
