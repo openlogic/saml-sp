@@ -4,6 +4,8 @@
 * 1 major enhancement
   * Birthday!
 
-Next
+2.0.0 / 2010-01-29
 ----
 
+* Added issuer verification to artifact resolution to protect against
+  spoofing.

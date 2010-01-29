@@ -15,6 +15,7 @@ describe SamlSp::Config do
           artifact_resolution_service {
             source_id "#{@source_id}"
             uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
           }
         CONFIG
       @tmpfile.flush
@@ -38,6 +39,7 @@ describe SamlSp::Config do
           artifact_resolution_service {
             source_id "01234567890123456789"
             uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
 
             http_basic_auth {
               realm    "myssorealm"
@@ -58,6 +60,10 @@ describe SamlSp::Config do
     
     it "should build a resolver with correct service uri" do 
       @resolver.resolution_service_uri.to_s.should == "http://idp.invalid/resolve-artifacts"
+    end
+
+    it "should build a resolver with correct issuer" do 
+      @resolver.issuer.should == "http://idp.invalid/"
     end
     
     it "should build a resolver with correct realm" do 
@@ -80,6 +86,7 @@ describe SamlSp::Config do
           artifact_resolution_service {
             source_id "01234567890123456789"
             uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
           }
         CONFIG
     end
@@ -96,6 +103,10 @@ describe SamlSp::Config do
         @resolver.resolution_service_uri.to_s.should == "http://idp.invalid/resolve-artifacts"
     end
     
+    it "should build a resolver with correct issuer" do 
+      @resolver.issuer.should == "http://idp.invalid/"
+    end
+
     it "should build a resolver with correct realm" do 
       @resolver.basic_auth_realm.should == nil
     end
@@ -114,6 +125,7 @@ describe SamlSp::Config do
       @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
             uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
           }
         CONFIG
     }.should raise_error SamlSp::ConfigurationError
@@ -124,6 +136,18 @@ describe SamlSp::Config do
       @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
             source_id "01234567890123456789"
+            issuer    "http://idp.invalid/"
+          }
+        CONFIG
+    }.should raise_error SamlSp::ConfigurationError
+  end
+
+  it "should raise error on missing issuer" do 
+    lambda {
+      @dsl.interpret(<<-CONFIG)
+          artifact_resolution_service {
+            source_id "01234567890123456789"
+            uri       "http://idp.invalid/resolve-artifacts"
           }
         CONFIG
     }.should raise_error SamlSp::ConfigurationError
@@ -135,6 +159,7 @@ describe SamlSp::Config do
           artifact_resolution_service {
             source_id "01234567890123456789"
             uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
 
             http_basic_auth {
               user_id  "myuserid"
@@ -151,6 +176,7 @@ describe SamlSp::Config do
           artifact_resolution_service {
             source_id "01234567890123456789"
             uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
 
             http_basic_auth {
               realm    "myssorealm"
@@ -167,6 +193,7 @@ describe SamlSp::Config do
           artifact_resolution_service {
             source_id "01234567890123456789"
             uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
 
             http_basic_auth {
               realm    "myssorealm"

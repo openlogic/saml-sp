@@ -20,6 +20,7 @@ Bones {
   summary   'SAML 2.0 SSO Sevice Provider Library'
   depend_on 'nokogiri'
   depend_on 'resourceful'
+  depend_on 'uuidtools'
   depend_on 'fakeweb', :dev => true
 }
 

@@ -30,7 +30,8 @@ adding block simpler to the following to your saml-sp config file.
 
     artifact_resolution_service {
       source_id   'opaque-id-of-the-idp'
-      uri         'https://idp.example/resolve-artifact'
+      uri         'https://samlar.idp.example/resolve-artifact'
+      issuer      'http://idp.example/'
       http_basic_auth {
         realm    'the-idp-realm'
         user_id  'my-user-id'
@@ -41,19 +42,22 @@ adding block simpler to the following to your saml-sp config file.
 The 'http_basic_auth' section is optional and only needed if the IdP
 uses HTTP basic authentication.
 
-Your saml-sp configuration file can be place in you application
-configuration directory and loaded using the following code during
-application startup.
+If you are using Rails the SamlSp will automatically load
+configuration info from `config/saml_sp.conf`.
 
-    SamlSp::Config.load_file(RAILS_ROOT + "/config/saml-sp.conf")
-   
+For non-Rails apps the saml-sp configuration file can be place in the
+application configuration directory and loaded using the following
+code during application startup.
+
+    SamlSp::Config.load_file(APP_ROOT + "/config/saml_sp.conf")
 
 
 ## REQUIREMENTS:
 
  * Nokogiri
  * Resourcful
-
+ * uuidtools
+ 
 ## INSTALL:
 
  * sudo gem install saml-sp

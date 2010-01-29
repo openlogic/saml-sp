@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '../spec_helper')
 describe Saml2::ArtifactResolver do 
   describe "lookups" do 
     before do 
-      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid')
     end
 
     it "should have pseudo-class lookup method" do 
@@ -20,7 +20,7 @@ describe Saml2::ArtifactResolver do
 
   describe "successfully resolving artifact" do 
     before do 
-      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid')
       @resolver.basic_auth_credentials('myuserid', 'mypasswd', 'myrealm')
 
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
@@ -32,14 +32,14 @@ describe Saml2::ArtifactResolver do
     end
 
     it "should extract issuer from response" do 
-      @resolver.resolve(@artifact).issuer.should == 'https://idp.invalid'
+      @resolver.resolve(@artifact).issuer.should == 'http://idp.invalid'
     end
 
   end
 
   describe "denied artifact resolution request" do 
     before do 
-      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid')
       @resolver.basic_auth_credentials('myuserid', 'mypasswd', 'myrealm')
 
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
@@ -65,7 +65,7 @@ describe Saml2::ArtifactResolver do
               Version="2.0"
               xmlns="urn:oasis:names:tc:SAML:2.0:protocol">
             <ns1:Issuer xmlns:ns1="urn:oasis:names:tc:SAML:2.0:assertion">
-              https://idp.invalid
+              http://idp.invalid
             </ns1:Issuer>
 
             <Status>
@@ -80,7 +80,7 @@ describe Saml2::ArtifactResolver do
               <ns2:Issuer
                   Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity"
                   xmlns:ns2="urn:oasis:names:tc:SAML:2.0:assertion">
-                https://idp.invalid
+                http://idp.invalid
               </ns2:Issuer>
 
               <Status>
@@ -94,7 +94,7 @@ describe Saml2::ArtifactResolver do
                   xmlns:ns3="urn:oasis:names:tc:SAML:2.0:assertion">
                 <ns3:Issuer
                     Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">
-                  https://idp.invalid
+                  http://idp.invalid
                 </ns3:Issuer>
 
                 <ns3:Subject>

@@ -22,9 +22,10 @@ module SamlSp
     def artifact_resolution_service(&blk)
       yield
 
-      raise ConfigurationError, "Incomplete artifact resolution service information" unless @source_id && @uri
+      raise ConfigurationError, "Incomplete artifact resolution service information" unless 
+        @source_id && @uri && @issuer_uri
 
-      resolver = Saml2::ArtifactResolver.new(@source_id, @uri)
+      resolver = Saml2::ArtifactResolver.new(@source_id, @uri, @issuer_uri)
       
       if @has_basic_auth_credentials
         resolver.basic_auth_credentials(@realm, @user_id, @password)
@@ -39,6 +40,10 @@ module SamlSp
 
     def uri(resolution_service_uri)
       @uri = resolution_service_uri
+    end
+
+    def issuer(issuer_uri)
+      @issuer_uri = issuer_uri
     end
 
     def http_basic_auth(&blk)
