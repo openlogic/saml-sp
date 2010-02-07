@@ -11,3 +11,8 @@
   spoofing.
 * Removed attempt to load config file from non-existent directory for
   Rails apps.
+
+Next 
+----
+
+* Improved logging of artifact resolver registration.

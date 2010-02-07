@@ -72,6 +72,10 @@ module Saml2
       assertion
     end
 
+    def to_s
+      "Resolver for <#{issuer}> (#{Base64.encode64(source_id).strip})"
+    end
+
     protected
 
     def response_status(resp_doc)
@@ -118,7 +122,7 @@ XML
     def register(resolver)
       resolvers_table[resolver.source_id] = resolver
 
-      logger.info "saml-sp: Resolver for source '#{resolver.source_id}' registered"
+      logger.info "saml-sp: #{resolver}' registered"
     end
     
     def lookup_by_source_id(source_id)
