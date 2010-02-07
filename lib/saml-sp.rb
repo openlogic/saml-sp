@@ -3,9 +3,9 @@ require 'logger'
 module SamlSp
 
   # :stopdoc:
-  VERSION = '2.0.0'
   LIBPATH = ::File.expand_path(::File.dirname(__FILE__)) + ::File::SEPARATOR
   PATH = ::File.dirname(LIBPATH) + ::File::SEPARATOR
+  VERSION = ::File.read(PATH + 'VERSION').strip
   # :startdoc:
 
   # Returns the version string for the library.

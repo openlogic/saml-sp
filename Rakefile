@@ -1,31 +1,23 @@
-
 begin
-  require 'bones'
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = 'saml-sp'
+    gemspec.summary = 'SAML 2.0 SSO Sevice Provider Library'
+    gemspec.email = 'pezra@barelyenough.org'
+    gemspec.authors = ["OpenLogic", "Peter Williams"]
+    gemspec.add_dependency 'nokogiri'
+    gemspec.add_dependency 'resourceful'
+    gemspec.add_dependency 'uuidtools'
+    gemspec.add_development_dependency 'rspec'
+  end
+  Jeweler::GemcutterTasks.new
 rescue LoadError
-  abort '### Please install the "bones" gem ###'
+  puts "Jeweler not available. Install it with: gem install jeweler"
 end
-
-ensure_in_path 'lib'
-require 'saml-sp'
-
-task :default => 'test:run'
-task 'gem:release' => 'test:run'
-
-Bones {
-  name      'saml-sp'
-  authors   'Peter Williams'
-  email     'pezra@barleyenough.org'
-  url       'http://github.com/pezra/saml-sp'
-  version   SamlSp::VERSION
-  summary   'SAML 2.0 SSO Sevice Provider Library'
-  depend_on 'nokogiri'
-  depend_on 'resourceful'
-  depend_on 'uuidtools'
-  depend_on 'fakeweb', :dev => true
-}
 
 require 'spec/rake/spectask'
 Spec::Rake::SpecTask.new
 
 task 'test:run' => :spec 
 # EOF
+
