@@ -9,6 +9,7 @@ begin
     gemspec.add_dependency 'resourceful'
     gemspec.add_dependency 'uuidtools'
     gemspec.add_development_dependency 'rspec'
+    gemspec.files = FileList['lib/**/*.rb']
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
