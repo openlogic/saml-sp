@@ -16,3 +16,4 @@ Next
 ----
 
 * Improved logging of artifact resolver registration.
+* Promiscuous basic auth support.
