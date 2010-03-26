@@ -1,4 +1,5 @@
 require 'addressable/uri'
+gem 'openlogic-resourceful'
 require 'resourceful'
 require 'nokogiri'
 require 'uuidtools'
@@ -38,14 +39,27 @@ module Saml2
     end
 
     # Set HTTP basic authentication credentials
-    def basic_auth_credentials(realm, user_id, password)
+    def basic_auth_credentials(user_id, password, realm = nil)
       @basic_auth_realm = realm
       @basic_auth_user_id = user_id
       @basic_auth_password = password
-
-      Resourceful.add_authenticator Resourceful::BasicAuthenticator.new(realm, user_id, password)
     end
 
+
+    def http
+      @http ||= Resourceful::HttpAccessor.new(:authenticators => authenticator)
+    end
+
+    def authenticator
+      return nil unless basic_auth_user_id
+
+      if basic_auth_realm
+        Resourceful::BasicAuthenticator.new(basic_auth_realm, basic_auth_user_id, basic_auth_password)
+      else
+        Resourceful::PromiscuousBasicAuthenticator.new(basic_auth_user_id, basic_auth_password)
+      end
+    end
+    
     # Resolve `artifact` into an Assertion.  
     #
     # @param [Saml2::Type4Artifact] The artifact to resolve.
@@ -58,8 +72,9 @@ module Saml2
     # @raise [AnomalousResponseIssuerError] When the issuer in the
     #   response do not match the expected issuer for this source.
     def resolve(artifact)
-      resp = Resourceful.post  resolution_service_uri, request_document_for(artifact), 
-                               'Accept' => 'application/soap+xml', 'Content-Type' => 'application/soap+xml'
+      resp = http.resource(resolution_service_uri).post(request_document_for(artifact), 
+                                                        'Accept' => 'application/soap+xml', 
+                                                        'Content-Type' => 'application/soap+xml')
 
       doc = Nokogiri::XML.parse(resp.body)
       raise RequestDeniedError unless response_status(doc) == 'urn:oasis:names:tc:SAML:2.0:status:Success'

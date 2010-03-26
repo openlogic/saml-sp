@@ -78,6 +78,53 @@ describe SamlSp::Config do
       @resolver.basic_auth_password.should == 'mypassword'
       end
   end
+
+  describe "valid basic promiscuous auth'd service description" do 
+    before do 
+      @dsl = SamlSp::Config.new
+      @resolver = @dsl.interpret(<<-CONFIG)
+          artifact_resolution_service {
+            source_id "01234567890123456789"
+            uri       "http://idp.invalid/resolve-artifacts"
+            issuer    "http://idp.invalid/"
+
+            http_basic_auth {
+              promiscuous
+              user_id  "myuserid"
+              password "mypassword"
+            }
+          }
+        CONFIG
+    end
+    
+    it "should build a resolver" do 
+      @resolver.should be_kind_of(Saml2::ArtifactResolver)
+    end
+    
+      it "should build a resolver with correct source id" do 
+      @resolver.source_id.should == '01234567890123456789'
+    end
+    
+    it "should build a resolver with correct service uri" do 
+      @resolver.resolution_service_uri.to_s.should == "http://idp.invalid/resolve-artifacts"
+    end
+
+    it "should build a resolver with correct issuer" do 
+      @resolver.issuer.should == "http://idp.invalid/"
+    end
+    
+    it "should build a resolver with correct realm" do 
+      @resolver.basic_auth_realm.should be_nil
+    end
+      
+    it "should build a resolver with correct user id" do 
+      @resolver.basic_auth_user_id.should == 'myuserid'
+    end
+    
+    it "should build a resolver with correct password" do 
+      @resolver.basic_auth_password.should == 'mypassword'
+      end
+  end
   
   describe "valid non-auth service description" do 
     before do 

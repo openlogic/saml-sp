@@ -27,8 +27,8 @@ module SamlSp
 
       resolver = Saml2::ArtifactResolver.new(@source_id, @uri, @issuer_uri)
       
-      if @has_basic_auth_credentials
-        resolver.basic_auth_credentials(@realm, @user_id, @password)
+      if @auth_info
+        resolver.basic_auth_credentials(@auth_info.user_id, @auth_info.password, @auth_info.realm)
       end
 
       resolver
@@ -47,21 +47,44 @@ module SamlSp
     end
 
     def http_basic_auth(&blk)
-      @has_basic_auth_credentials = true
-      yield
-      raise ConfigurationError, "Incomplete HTTP basic auth credentials" unless @realm && @user_id && @password
+      @auth_info = HttpBasicAuthConfig.new
+      @auth_info.interpret(&blk)
+
+      raise ConfigurationError, "Incomplete HTTP basic auth credentials" unless @auth_info.valid?
     end
 
-    def realm(realm)
-      @realm = realm
-    end
+    class HttpBasicAuthConfig
+      @@no_val_marker = Object.new
 
-    def user_id(user_id)
-      @user_id = user_id
-    end
-    
-    def password(password)
-      @password = password
+      def interpret(&blk)
+        instance_eval &blk
+        self
+      end
+
+      def self.conf_item(name)
+        
+        class_eval(<<-METHOD)
+        def #{name}(val=@@no_val_marker)
+          if @@no_val_marker.equal? val
+            @#{name}
+          else
+            @#{name} = val
+          end
+        end
+        METHOD
+      end
+
+      conf_item :realm
+      conf_item :user_id
+      conf_item :password
+
+      def promiscuous
+        @promiscuous = true
+      end
+
+      def valid?
+        (@realm || @promiscuous) && @user_id && @password
+      end
     end
   end
 end

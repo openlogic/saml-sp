@@ -6,7 +6,7 @@ begin
     gemspec.email = 'pezra@barelyenough.org'
     gemspec.authors = ["OpenLogic", "Peter Williams"]
     gemspec.add_dependency 'nokogiri'
-    gemspec.add_dependency 'resourceful'
+    gemspec.add_dependency 'openlogic-resourceful'
     gemspec.add_dependency 'uuidtools'
     gemspec.add_development_dependency 'rspec'
     gemspec.files = FileList["[A-Z]*", "{bin,generators,lib,test,spec,rails}/**/*"]
