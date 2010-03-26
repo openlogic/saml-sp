@@ -12,7 +12,7 @@
 * Removed attempt to load config file from non-existent directory for
   Rails apps.
 
-Next 
+2.1.0 / 2010-03-26
 ----
 
 * Improved logging of artifact resolver registration.
