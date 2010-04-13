@@ -141,7 +141,7 @@ XML
     end
     
     def lookup_by_source_id(source_id)
-      resolvers_table[source_id] || raise(NoSuchResolverError, "No resolver registered for source `#{source_id}`")
+      resolvers_table[source_id] || raise(NoSuchResolverError, "No resolver registered for source `#{Base64.encode64(source_id).strip}`")
     end
     
     protected
