@@ -88,6 +88,15 @@ module Saml2
         assertion.issuer == issuer
 
       assertion
+
+    rescue Resourceful::UnsuccessfulHttpRequestError => e
+
+      logger.debug { 
+        body = e.http_request.body
+        body.rewind
+        "Artifact resolution request:\n" + body.read.gsub(/^/, '    ')}
+      logger.debug {"Artifact resolution response:\n" + e.http_response.body.gsub(/^/, '    ')}
+      raise
     end
 
     def to_s
