@@ -35,6 +35,15 @@ code during application startup.
 
     SamlSp::Config.load_file(APP_ROOT + "/config/saml_sp.conf")
 
+#### Logging
+
+saml-sp will log to a Logger object that can be specified in the config file.
+
+    logger MY_APP_LOGGER
+
+If you are using saml-sp in a rails app it will automatically log to
+the Rails default logger.
+
 #### Artifact Resolution Service
         
 For artifact resolution to take place you need to configure an
