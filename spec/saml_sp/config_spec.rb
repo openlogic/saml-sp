@@ -32,6 +32,24 @@ describe SamlSp::Config do
     end
   end
 
+  describe "global log configuration" do 
+    before do 
+      @orig_logger = SamlSp.logger
+      @dsl = SamlSp::Config.new
+      @resolver = @dsl.interpret(<<-CONFIG)
+          logger :MARKER
+        CONFIG
+    end
+    
+    it "should set SamlSp.logger correctly" do 
+      SamlSp.logger.should == :MARKER
+    end
+
+    after do 
+      SamlSp.logger = @orig_logger
+    end
+  end
+
   describe "valid basic auth'd service description" do 
     before do 
       @dsl = SamlSp::Config.new
@@ -54,7 +72,7 @@ describe SamlSp::Config do
       @resolver.should be_kind_of(Saml2::ArtifactResolver)
     end
     
-      it "should build a resolver with correct source id" do 
+    it "should build a resolver with correct source id" do 
       @resolver.source_id.should == '01234567890123456789'
     end
     

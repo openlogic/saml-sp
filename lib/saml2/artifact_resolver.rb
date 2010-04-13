@@ -45,9 +45,12 @@ module Saml2
       @basic_auth_password = password
     end
 
+    def logger
+      SamlSp.logger
+    end
 
     def http
-      @http ||= Resourceful::HttpAccessor.new(:authenticators => authenticator)
+      @http ||= Resourceful::HttpAccessor.new(:authenticators => authenticator, :logger => logger)
     end
 
     def authenticator

@@ -2,11 +2,44 @@ module SamlSp
   class ConfigurationError < StandardError
   end
 
-  class Config
-    include Logging
+  class ConfigBlock
+    # Interpret a config block.
+    def interpret(config_block, filename = nil)
+      if filename
+        instance_eval config_block, filename
+      elsif config_block.respond_to? :call
+        instance_eval &config_block
+      else
+        instance_eval config_block
+      end
+      
+      self
+    end
+    
+    def self.inherited(subclass)
+      subclass.extend ClassMethods
+    end
+    
+    NOVAL_MARKER = Object.new
+    
+    module ClassMethods
+      def config_item(name)
+        class_eval(<<METHOD)
+            def #{name}(val=NOVAL_MARKER)
+              if NOVAL_MARKER.equal? val
+                @#{name}
+              else
+                @#{name} = val
+              end
+            end
+METHOD
+      end
+    end
+  end
 
+  class Config < ConfigBlock
     def self.load_file(filename)
-      logger.info "saml-sp: Loading config file '#{filename}'"
+      SamlSp.logger.info "saml-sp: Loading config file '#{filename}'"
 
       new.interpret File.read(filename), filename
     end
@@ -19,13 +52,29 @@ module SamlSp
       end
     end
 
+    def logger(logger)
+      SamlSp.logger = logger
+    end
+
     def artifact_resolution_service(&blk)
-      yield
+      dsl = ResolutionSerivceConfig.new
+      dsl.interpret(blk)
+    end
+  end 
+   
 
-      raise ConfigurationError, "Incomplete artifact resolution service information" unless 
-        @source_id && @uri && @issuer_uri
+  class ResolutionSerivceConfig < ConfigBlock
+    config_item :source_id
+    config_item :uri
+    config_item :issuer
+    config_item :logger
 
-      resolver = Saml2::ArtifactResolver.new(@source_id, @uri, @issuer_uri)
+    def interpret(config_block, filename = nil)
+      super
+
+      raise ConfigurationError, "Incomplete artifact resolution service information" unless @source_id && @uri && @issuer
+      
+      resolver = Saml2::ArtifactResolver.new(@source_id, @uri, @issuer)
       
       if @auth_info
         resolver.basic_auth_credentials(@auth_info.user_id, @auth_info.password, @auth_info.realm)
@@ -33,58 +82,32 @@ module SamlSp
 
       resolver
     end
-
-    def source_id(source_id)
-      @source_id = source_id
-    end
-
-    def uri(resolution_service_uri)
-      @uri = resolution_service_uri
-    end
-
-    def issuer(issuer_uri)
-      @issuer_uri = issuer_uri
-    end
-
+    
     def http_basic_auth(&blk)
       @auth_info = HttpBasicAuthConfig.new
-      @auth_info.interpret(&blk)
+      @auth_info.interpret(blk)
+    end
+  end
 
-      raise ConfigurationError, "Incomplete HTTP basic auth credentials" unless @auth_info.valid?
+  class HttpBasicAuthConfig < ConfigBlock
+    config_item :realm
+    config_item :user_id
+    config_item :password
+
+    def promiscuous
+      @promiscuous = true
     end
 
-    class HttpBasicAuthConfig
-      @@no_val_marker = Object.new
+    def interpret(blk, filename = nil)
+      super
 
-      def interpret(&blk)
-        instance_eval &blk
-        self
-      end
+      raise ConfigurationError, "Incomplete HTTP basic auth credentials" unless valid? 
 
-      def self.conf_item(name)
-        
-        class_eval(<<-METHOD)
-        def #{name}(val=@@no_val_marker)
-          if @@no_val_marker.equal? val
-            @#{name}
-          else
-            @#{name} = val
-          end
-        end
-        METHOD
-      end
+      self
+    end
 
-      conf_item :realm
-      conf_item :user_id
-      conf_item :password
-
-      def promiscuous
-        @promiscuous = true
-      end
-
-      def valid?
-        (@realm || @promiscuous) && @user_id && @password
-      end
+    def valid?
+      (@realm || @promiscuous) && @user_id && @password
     end
   end
 end
