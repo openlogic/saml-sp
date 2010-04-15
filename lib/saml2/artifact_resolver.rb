@@ -80,7 +80,7 @@ module Saml2
                                                         'Content-Type' => 'application/soap+xml')
 
       doc = Nokogiri::XML.parse(resp.body)
-      raise RequestDeniedError unless response_status(doc) == 'urn:oasis:names:tc:SAML:2.0:status:Success'
+      assert_successful_response(doc)
 
       assertion = Assertion.new_from_xml(doc)
 
@@ -105,8 +105,25 @@ module Saml2
 
     protected
 
-    def response_status(resp_doc)
-      resp_doc.at("//sp:StatusCode/@Value", namespaces).content.strip
+    def assert_successful_response(resp_doc)
+      response_code = resp_doc.at("//sp:StatusCode/@Value", namespaces).content.strip
+      return if response_code == 'urn:oasis:names:tc:SAML:2.0:status:Success'
+      
+      # Request was not handled successfully
+      err_message =  "Request failed"
+
+      status_message_elem = resp_doc.at("//sp:StatusMessage", namespaces) 
+      if status_message_elem
+        err_message << " because \"#{status_message_elem.content.strip}\""
+      end
+      
+      err_message << ". (status code: #{response_code})"
+
+      if status_details_elem = resp_doc.at("//sp:StatusDetails", namespaces) 
+        logger.debug "Details for resolve artifact failure (status code: #{response_code}:\n" + status_details_elem.content
+      end
+
+      raise RequestDeniedError, err_message
     end
 
     def namespaces
@@ -116,19 +133,18 @@ module Saml2
     def request_document_for(artifact)
       <<XML
 <?xml version="1.0"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
-                   xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance" 
-                   xmlns:xsd="http://www.w3.org/1999/XMLSchema">
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
   <SOAP-ENV:Body>
-    <samlp:Request IssueInstant="2006-12-15T15:35:12.068Z" 
-                   MajorVersion="1" MinorVersion="0" 
-                   RequestID="#{UUIDTools::UUID.random_create}"
-                   xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion" 
-                   xmlns:samlp="urn:oasis:names:tc:SAML:1.0:protocol">
-      <samlp:AssertionArtifact>
+    <samlp:ArtifactResolve IssueInstant="2006-12-15T15:35:12.068Z" 
+                           Version="2.0"
+                           ID="#{UUIDTools::UUID.random_create}"
+                           xmlns="urn:oasis:names:tc:SAML:2.0:assertion" 
+                           xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+      <Issuer>#{issuer}</Issuer>
+      <Artifact>
         #{artifact.to_s}
-      </samlp:AssertionArtifact>
-    </samlp:Request>
+      </Artifact>
+    </samlp:ArtifactResolve>
   </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 XML
