@@ -119,8 +119,8 @@ module Saml2
       
       err_message << ". (status code: #{response_code})"
 
-      if status_details_elem = resp_doc.at("//sp:StatusDetails", namespaces) 
-        logger.debug "Details for resolve artifact failure (status code: #{response_code}:\n" + status_details_elem.content
+      if status_details_elem = resp_doc.at("//sp:StatusDetail", namespaces) 
+        logger.debug "Details for resolve artifact failure (status code: #{response_code}):\n" + status_details_elem.content
       end
 
       raise RequestDeniedError, err_message
