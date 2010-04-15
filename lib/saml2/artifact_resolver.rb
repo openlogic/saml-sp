@@ -137,7 +137,7 @@ module Saml2
   <SOAP-ENV:Body>
     <samlp:ArtifactResolve IssueInstant="2006-12-15T15:35:12.068Z" 
                            Version="2.0"
-                           ID="#{UUIDTools::UUID.random_create}"
+                           ID="_#{UUIDTools::UUID.random_create}"
                            xmlns="urn:oasis:names:tc:SAML:2.0:assertion" 
                            xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
       <Issuer>#{issuer}</Issuer>
