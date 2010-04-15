@@ -66,15 +66,16 @@ METHOD
   class ResolutionSerivceConfig < ConfigBlock
     config_item :source_id
     config_item :uri
-    config_item :issuer
+    config_item :identity_provider
+    config_item :service_provider
     config_item :logger
 
     def interpret(config_block, filename = nil)
       super
 
-      raise ConfigurationError, "Incomplete artifact resolution service information" unless @source_id && @uri && @issuer
+      raise ConfigurationError, "Incomplete artifact resolution service information" unless @source_id && @uri && @identity_provider && @service_provider
       
-      resolver = Saml2::ArtifactResolver.new(@source_id, @uri, @issuer)
+      resolver = Saml2::ArtifactResolver.new(@source_id, @uri, @identity_provider, @service_provider)
       
       if @auth_info
         resolver.basic_auth_credentials(@auth_info.user_id, @auth_info.password, @auth_info.realm)

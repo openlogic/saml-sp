@@ -3,7 +3,7 @@ require File.join(File.dirname(__FILE__), '../spec_helper')
 describe Saml2::ArtifactResolver do 
   describe "lookups" do 
     before do 
-      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid', 'http://sp.invalid')
     end
 
     it "should have pseudo-class lookup method" do 
@@ -20,7 +20,7 @@ describe Saml2::ArtifactResolver do
 
   describe "successfully resolving artifact" do 
     before do 
-      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid', 'http://sp.invalid')
       @resolver.basic_auth_credentials('myuserid', 'mypasswd', 'myrealm')
 
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
@@ -39,7 +39,7 @@ describe Saml2::ArtifactResolver do
 
   describe "denied artifact resolution request" do 
     before do 
-      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid')
+      @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid', 'http://sp.invalid')
       @resolver.basic_auth_credentials('myuserid', 'mypasswd', 'myrealm')
 
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')

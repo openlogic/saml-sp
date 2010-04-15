@@ -18,7 +18,7 @@ module Saml2
   end
 
   class ArtifactResolver
-    attr_reader :source_id, :resolution_service_uri, :issuer
+    attr_reader :source_id, :resolution_service_uri, :idp_id, :sp_id
     attr_reader :basic_auth_realm, :basic_auth_user_id, :basic_auth_password
 
     # Initialize and register a new artifact resolver.
@@ -29,12 +29,16 @@ module Saml2
     # @param [string] resolution_service_uri The URI that will resolve
     #   artifacts into assertions.  
     #
-    # @param [String] issuer The URI identifying the issuer at this
+    # @param [String] idp_id The URI identifying the assertion issuer at this
     #   source.
-    def initialize(source_id, resolution_service_uri, issuer)
+    #
+    # @param [String] sp_id The URI identifying (for this source) the service 
+    #    provider.  IOW, the id of your application.
+    def initialize(source_id, resolution_service_uri, idp_id, sp_id)
       @source_id = source_id
       @resolution_service_uri = Addressable::URI.parse(resolution_service_uri) 
-      @issuer = issuer
+      @idp_id = idp_id
+      @sp_id = sp_id
       ArtifactResolverRegistry.register self  
     end
 
@@ -72,8 +76,8 @@ module Saml2
     # @raise [RequestDeniedError] When the resolution service refuses
     #   to resolve the artifact.
     #
-    # @raise [AnomalousResponseIssuerError] When the issuer in the
-    #   response do not match the expected issuer for this source.
+    # @raise [AnomalousResponseIssuerError] When the issuer of the
+    #   response do not match the idp_id for this source.
     def resolve(artifact)
       resp = http.resource(resolution_service_uri).post(request_document_for(artifact), 
                                                         'Accept' => 'application/soap+xml', 
@@ -84,8 +88,8 @@ module Saml2
 
       assertion = Assertion.new_from_xml(doc)
 
-      raise AnomalousResponseIssuerError.new_from_issuers(issuer, assertion.issuer) unless 
-        assertion.issuer == issuer
+      raise AnomalousResponseIssuerError.new_from_issuers(idp_id, assertion.issuer) unless 
+        assertion.issuer == idp_id
 
       assertion
 
@@ -100,7 +104,7 @@ module Saml2
     end
 
     def to_s
-      "Resolver for <#{issuer}> (#{Base64.encode64(source_id).strip})"
+      "Resolver for <#{idp_id}> (#{Base64.encode64(source_id).strip})"
     end
 
     protected
@@ -140,7 +144,7 @@ module Saml2
                            ID="_#{UUIDTools::UUID.random_create}"
                            xmlns="urn:oasis:names:tc:SAML:2.0:assertion" 
                            xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
-      <Issuer>#{issuer}</Issuer>
+      <Issuer>#{sp_id}</Issuer>
       <Artifact>
         #{artifact.to_s}
       </Artifact>

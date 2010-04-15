@@ -13,9 +13,10 @@ describe SamlSp::Config do
       @tmpfile = Tempfile.open('saml-sp-config') 
       @tmpfile << <<-CONFIG
           artifact_resolution_service {
-            source_id "#{@source_id}"
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            source_id         "#{@source_id}"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
           }
         CONFIG
       @tmpfile.flush
@@ -55,9 +56,10 @@ describe SamlSp::Config do
       @dsl = SamlSp::Config.new
       @resolver = @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            source_id "01234567890123456789"
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            source_id         "01234567890123456789"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
 
             http_basic_auth {
               realm    "myssorealm"
@@ -80,8 +82,12 @@ describe SamlSp::Config do
       @resolver.resolution_service_uri.to_s.should == "http://idp.invalid/resolve-artifacts"
     end
 
-    it "should build a resolver with correct issuer" do 
-      @resolver.issuer.should == "http://idp.invalid/"
+    it "should build a resolver with correct identity provider id" do 
+      @resolver.idp_id.should == "http://idp.invalid/"
+    end
+
+    it "should build a resolver with correct service provider id" do 
+      @resolver.sp_id.should == "http://sp.invalid/"
     end
     
     it "should build a resolver with correct realm" do 
@@ -102,9 +108,10 @@ describe SamlSp::Config do
       @dsl = SamlSp::Config.new
       @resolver = @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            source_id "01234567890123456789"
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            source_id         "01234567890123456789"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
 
             http_basic_auth {
               promiscuous
@@ -127,8 +134,12 @@ describe SamlSp::Config do
       @resolver.resolution_service_uri.to_s.should == "http://idp.invalid/resolve-artifacts"
     end
 
-    it "should build a resolver with correct issuer" do 
-      @resolver.issuer.should == "http://idp.invalid/"
+    it "should build a resolver with correct identity provider id" do 
+      @resolver.idp_id.should == "http://idp.invalid/"
+    end
+
+    it "should build a resolver with correct service provider id" do 
+      @resolver.sp_id.should == "http://sp.invalid/"
     end
     
     it "should build a resolver with correct realm" do 
@@ -149,9 +160,10 @@ describe SamlSp::Config do
       @dsl = SamlSp::Config.new
       @resolver = @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            source_id "01234567890123456789"
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            source_id         "01234567890123456789"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
           }
         CONFIG
     end
@@ -168,8 +180,12 @@ describe SamlSp::Config do
         @resolver.resolution_service_uri.to_s.should == "http://idp.invalid/resolve-artifacts"
     end
     
-    it "should build a resolver with correct issuer" do 
-      @resolver.issuer.should == "http://idp.invalid/"
+    it "should build a resolver with correct identity provider id" do 
+      @resolver.idp_id.should == "http://idp.invalid/"
+    end
+
+    it "should build a resolver with correct service provider id" do 
+      @resolver.sp_id.should == "http://sp.invalid/"
     end
 
     it "should build a resolver with correct realm" do 
@@ -189,8 +205,9 @@ describe SamlSp::Config do
     lambda {
       @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
           }
         CONFIG
     }.should raise_error SamlSp::ConfigurationError
@@ -200,8 +217,9 @@ describe SamlSp::Config do
     lambda {
       @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            source_id "01234567890123456789"
-            issuer    "http://idp.invalid/"
+            source_id         "01234567890123456789"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
           }
         CONFIG
     }.should raise_error SamlSp::ConfigurationError
@@ -222,9 +240,10 @@ describe SamlSp::Config do
     lambda {
       @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            source_id "01234567890123456789"
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            source_id         "01234567890123456789"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
 
             http_basic_auth {
               user_id  "myuserid"
@@ -239,9 +258,10 @@ describe SamlSp::Config do
     lambda {
       @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            source_id "01234567890123456789"
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            source_id         "01234567890123456789"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
 
             http_basic_auth {
               realm    "myssorealm"
@@ -256,9 +276,10 @@ describe SamlSp::Config do
     lambda {
       @dsl.interpret(<<-CONFIG)
           artifact_resolution_service {
-            source_id "01234567890123456789"
-            uri       "http://idp.invalid/resolve-artifacts"
-            issuer    "http://idp.invalid/"
+            source_id         "01234567890123456789"
+            uri               "http://idp.invalid/resolve-artifacts"
+            identity_provider "http://idp.invalid/"
+            service_provider  "http://sp.invalid/"
 
             http_basic_auth {
               realm    "myssorealm"

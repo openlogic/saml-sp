@@ -43,7 +43,7 @@ describe Saml2::Type4Artifact do
 
   describe "simple artifact" do 
     before do 
-      @resolver = Saml2::ArtifactResolver.new('01234567890123456789', 'http://idp.invalid/artifact-resolver', 'http://idp.invalid/')
+      @resolver = Saml2::ArtifactResolver.new('01234567890123456789', 'http://idp.invalid/artifact-resolver', 'http://idp.invalid/', 'http://sp.invalid/')
 
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
     end

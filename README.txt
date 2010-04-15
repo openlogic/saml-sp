@@ -51,9 +51,10 @@ artifact resolution service for the artifacts source.  This is done by
 adding block similar to the following to your saml-sp config file.
 
     artifact_resolution_service {
-      source_id   'opaque-id-of-the-idp'
-      uri         'https://samlar.idp.example/resolve-artifact'
-      issuer      'http://idp.example/'
+      source_id         'opaque-id-of-the-idp'
+      uri               'https://samlar.idp.example/resolve-artifact'
+      identity_provider 'http://idp.example/'
+      service_provider  'http://your-domain.example/'
       http_basic_auth {
         realm    'the-idp-realm'
         user_id  'my-user-id'
@@ -61,8 +62,26 @@ adding block similar to the following to your saml-sp config file.
       }
     }
 
-The 'http_basic_auth' section is optional and only needed if the IdP
-uses HTTP basic authentication.  
+The configuration details are:
+
+ * source_id: 
+   The id of the source that this resolution service can
+   resolve.  This is a 20 octet binary string.
+ 
+ * uri:
+   The endpoint to which artifact resolve requests should be sent.
+ 
+ * identity_provider:
+   The URI identifying the identity provider that issues assertions 
+   using the source id specified.
+   
+ * service_provider:
+   The URI identifying the your software (the service provider) to 
+   the identity provider.
+   
+ * http_basic_auth:
+   (Optional) The credentials needed to authenticate with the IdP
+   using HTTP basic authentication.  
 
 #### Promiscuous Auth
 
