@@ -139,16 +139,14 @@ module Saml2
 <?xml version="1.0"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
   <SOAP-ENV:Body>
-    <samlp:ArtifactResolve IssueInstant="2006-12-15T15:35:12.068Z" 
-                           Version="2.0"
-                           ID="_#{UUIDTools::UUID.random_create}"
-                           xmlns="urn:oasis:names:tc:SAML:2.0:assertion" 
-                           xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
-      <Issuer>#{sp_id}</Issuer>
-      <Artifact>
-        #{artifact.to_s}
-      </Artifact>
-    </samlp:ArtifactResolve>
+    <ArtifactResolve IssueInstant="2006-12-15T15:35:12.068Z" 
+                     Version="2.0"
+                     ID="_#{UUIDTools::UUID.random_create}"
+                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" 
+                     xmlns="urn:oasis:names:tc:SAML:2.0:protocol">
+      <saml:Issuer>#{sp_id}</saml:Issuer>
+      <Artifact>#{artifact.to_s}</Artifact>
+    </ArtifactResolve>
   </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 XML
