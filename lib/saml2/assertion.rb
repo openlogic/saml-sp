@@ -55,14 +55,14 @@ module Saml2
     end
 
     def self.new_from_xml(xml_assertion)
-      logger.debug {"Parsing assertion: \n" + xml_assertion.gsub(/^/, "\t")}
-
       doc = case xml_assertion
             when Nokogiri::XML::Node
               xml_assertion
             else
               Nokogiri::XML.parse(xml_assertion)
             end
+      logger.debug {"Parsing assertion: \n" + doc.to_xml(:indent => 2).gsub(/^/, "\t")}
+
 
       doc.root.add_namespace_definition('asrt', 'urn:oasis:names:tc:SAML:2.0:assertion')
 
