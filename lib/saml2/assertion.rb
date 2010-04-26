@@ -25,7 +25,7 @@ module Saml2
 
       def each_attribute_node_from(doc, &blk)
         attribute_nodes = doc.search('//asrt:Assertion/asrt:AttributeStatement/asrt:Attribute')
-        raise InvalidAssertionError, 'No attributes found' if attribute_nodes.empty?
+        raise InvalidAssertionError, "No attributes found in: \n#{doc.to_xml(:indent => 2)}" if attribute_nodes.empty?
         
         attribute_nodes.each &blk
       end                          
@@ -50,7 +50,13 @@ module Saml2
       artifact.resolve
     end
 
+    def self.logger
+      SamlSp.logger
+    end
+
     def self.new_from_xml(xml_assertion)
+      logger.debug {"Parsing assertion: \n" + xml_assertion.gsub(/^/, "\t")}
+
       doc = case xml_assertion
             when Nokogiri::XML::Node
               xml_assertion
