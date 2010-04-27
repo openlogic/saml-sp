@@ -1,8 +1,25 @@
-1.0.0 / 2010-01-22
-------
+3.0.4 / 2010-04-26
+---
 
-* 1 major enhancement
-  * Birthday!
+* Improved error messages when unable to interpret assertions documents properly.
+* Improved debug logging around parsing assertion documents.
+
+3.0.2 / 2010-04-26
+---
+
+* Fixed ArtifaceResolve request document such that it is valid against
+  the SAML schema.
+
+3.0.0 / 2010-04-23
+---
+
+* Added way to specify both the IdP and SP identifiers in the config file.
+
+2.1.0 / 2010-03-26
+----
+
+* Improved logging of artifact resolver registration.
+* Promiscuous basic auth support.
 
 2.0.0 / 2010-01-29
 ----
@@ -12,8 +29,10 @@
 * Removed attempt to load config file from non-existent directory for
   Rails apps.
 
-2.1.0 / 2010-03-26
-----
+1.0.0 / 2010-01-22
+------
 
-* Improved logging of artifact resolver registration.
-* Promiscuous basic auth support.
+* 1 major enhancement
+  * Birthday!
+
+
