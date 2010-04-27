@@ -1,6 +1,15 @@
 saml-sp
     by OpenLogic
     http://openlogic.com
+    peter.williams@openlogic.com
+
+## STATUS:
+
+This library is un-stable and under active development.  Version
+identifiers follow
+[rational version ](http://docs.rubygems.org/read/chapter/7#page26).
+The major version number does not indicate this library is stable or
+complete (or even functional).
 
 ## DESCRIPTION:
 
@@ -37,12 +46,12 @@ code during application startup.
 
 #### Logging
 
-saml-sp will log to a Logger object that can be specified in the config file.
+If you are using saml-sp in a rails app it will automatically log to
+the Rails default logger.  For non-Rails apps you can specify a Logger
+object to be used in the config file.
 
     logger MY_APP_LOGGER
 
-If you are using saml-sp in a rails app it will automatically log to
-the Rails default logger.
 
 #### Artifact Resolution Service
         
