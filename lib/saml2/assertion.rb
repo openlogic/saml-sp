@@ -25,8 +25,7 @@ module Saml2
 
       def each_attribute_node_from(doc, &blk)
         attribute_nodes = doc.search('//asrt:Assertion/asrt:AttributeStatement/asrt:Attribute')
-        raise InvalidAssertionError, "No attributes found in: \n#{doc.to_xml(:indent => 2)}" if attribute_nodes.empty?
-        
+         
         attribute_nodes.each &blk
       end                          
     end
