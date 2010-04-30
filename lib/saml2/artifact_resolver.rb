@@ -80,7 +80,7 @@ module Saml2
     #   response do not match the idp_id for this source.
     def resolve(artifact)
       soap_body = request_document_for(artifact)
-      logger.debug{"Resolve request:\nPOST #{resolution_service_uri}\n\n#{soap_body}"}
+      logger.debug{"ArtifactResolve request body:\n#{soap_body.gsub(/^/, "\t")}"}
       resp = http.resource(resolution_service_uri).post(soap_body,
                                                         'Accept' => 'application/soap+xml', 
                                                         'Content-Type' => 'application/soap+xml')
