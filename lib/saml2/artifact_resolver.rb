@@ -79,7 +79,9 @@ module Saml2
     # @raise [AnomalousResponseIssuerError] When the issuer of the
     #   response do not match the idp_id for this source.
     def resolve(artifact)
-      resp = http.resource(resolution_service_uri).post(request_document_for(artifact), 
+      soap_body = request_document_for(artifact)
+      logger.debug{"Resolve request:\nPOST #{resolution_service_uri}\n\n#{soap_body}"}
+      resp = http.resource(resolution_service_uri).post(soap_body,
                                                         'Accept' => 'application/soap+xml', 
                                                         'Content-Type' => 'application/soap+xml')
 
