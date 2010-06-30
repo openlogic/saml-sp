@@ -119,4 +119,6 @@ this resolutions service regardless of it's realm.
 
 ## LICENSE:
 
+Copyright (c) 2010 OpenLogic
+
 Licensed under the MIT License.  See LICENSE.txt
