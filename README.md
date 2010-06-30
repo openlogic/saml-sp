@@ -1,15 +1,17 @@
 saml-sp
-    by OpenLogic
-    http://openlogic.com
-    peter.williams@openlogic.com
+====
+
+by OpenLogic
+http://openlogic.com
+peter.williams@openlogic.com
 
 ## STATUS:
 
-This library is un-stable and under active development.  Version
-identifiers follow
+This library is stable and under active development.  
+
+Version identifiers follow
 [rational version ](http://docs.rubygems.org/read/chapter/7#page26).
-The major version number does not indicate this library is stable or
-complete (or even functional).
+The major version number does not indicate this library is complete.
 
 ## DESCRIPTION:
 
