@@ -5,4 +5,7 @@ SamlSp::Config.load_file config_file if File.exists? config_file
 
 
 
-# Licensed under MIT license.  See README.txt for details.
+# Copyright (c) 2010 OpenLogic
+#
+# Licensed under MIT license.  See LICENSE.txt
+

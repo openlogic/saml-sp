@@ -171,4 +171,7 @@ describe Saml2::Assertion do
 end
 
 
-# Licensed under MIT license.  See README.txt for details.
+# Copyright (c) 2010 OpenLogic
+#
+# Licensed under MIT license.  See LICENSE.txt
+

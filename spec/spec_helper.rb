@@ -19,5 +19,7 @@ Spec::Runner.configure do |config|
 end
 
 
+# Copyright (c) 2010 OpenLogic
+#
+# Licensed under MIT license.  See LICENSE.txt
 
-# Licensed under MIT license.  See README.txt for details.
