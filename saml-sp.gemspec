@@ -5,18 +5,20 @@
 
 Gem::Specification.new do |s|
   s.name = %q{saml-sp}
-  s.version = "3.1.0"
+  s.version = "3.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["OpenLogic", "Peter Williams"]
-  s.date = %q{2010-04-30}
+  s.date = %q{2010-06-30}
   s.email = %q{pezra@barelyenough.org}
   s.extra_rdoc_files = [
-    "README.txt"
+    "LICENSE.txt",
+     "README.md"
   ]
   s.files = [
     "History.txt",
-     "README.txt",
+     "LICENSE.txt",
+     "README.md",
      "Rakefile",
      "VERSION",
      "lib/saml-sp.rb",
