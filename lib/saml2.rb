@@ -3,3 +3,6 @@ module Saml2
   autoload :Assertion,                 'saml2/assertion'
   autoload :ArtifactResolver,          'saml2/artifact_resolver'
 end
+
+
+# Licensed under MIT license.  See README.txt for details.

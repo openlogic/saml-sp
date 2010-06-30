@@ -47,3 +47,6 @@ module Saml2
     end
   end
 end
+
+
+# Licensed under MIT license.  See README.txt for details.

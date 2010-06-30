@@ -161,3 +161,6 @@ describe Saml2::ArtifactResolver do
       SAML_RESP
 
 end
+
+
+# Licensed under MIT license.  See README.txt for details.

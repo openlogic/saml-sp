@@ -169,3 +169,6 @@ describe Saml2::Assertion do
   end
 
 end
+
+
+# Licensed under MIT license.  See README.txt for details.

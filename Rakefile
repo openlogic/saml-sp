@@ -22,3 +22,6 @@ Spec::Rake::SpecTask.new
 task 'test:run' => :spec 
 # EOF
 
+
+
+# Licensed under MIT license.  See README.txt for details.

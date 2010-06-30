@@ -184,3 +184,6 @@ XML
   end.new
 
 end
+
+
+# Licensed under MIT license.  See README.txt for details.

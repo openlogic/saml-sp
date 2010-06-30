@@ -18,3 +18,6 @@ Spec::Runner.configure do |config|
   # config.mock_with :rr
 end
 
+
+
+# Licensed under MIT license.  See README.txt for details.

@@ -64,3 +64,6 @@ require 'rubygems'
 
 autoload :Saml2, 'saml2'
 
+
+
+# Licensed under MIT license.  See README.txt for details.
