@@ -1,8 +1,8 @@
 saml-sp
 ====
 
-by OpenLogic
-http://openlogic.com
+by OpenLogic  
+http://openlogic.com  
 peter.williams@openlogic.com
 
 ## STATUS:
