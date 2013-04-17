@@ -3,11 +3,11 @@ $LOAD_PATH << File.expand_path(File.join(File.dirname(__FILE__), "../lib"))
 
 require 'saml-sp'
 
-require 'spec'
+require 'rspec'
 require 'pp'
 require 'fakeweb'
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   # == Mock Framework
   #
   # RSpec uses it's own mocking framework by default. If you prefer to

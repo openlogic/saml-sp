@@ -60,6 +60,11 @@ METHOD
       dsl = ResolutionSerivceConfig.new
       dsl.interpret(blk)
     end
+
+    def issuer(&blk)
+      dsl = IssuerConfig.new
+      dsl.interpret(blk)
+    end
   end 
    
 
@@ -109,6 +114,23 @@ METHOD
 
     def valid?
       (@realm || @promiscuous) && @user_id && @password
+    end
+  end
+
+  class IssuerConfig < ConfigBlock
+    config_item :id
+    config_item :verify_signatures
+
+    def interpret(blk, filename = nil)
+      super
+
+      raise ConfigurationError, "Incomplete Issuer configuration" unless valid?
+
+      Saml2::Issuer.new(@id, @verify_signatures)
+    end
+
+    def valid?
+      @id && !@verify_signatures.nil?
     end
   end
 end
