@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'saml2/artifact_resolver'
+require 'signed_xml'
 
 module Saml2
   class InvalidAssertionError < ArgumentError
@@ -60,8 +61,13 @@ module Saml2
             else
               Nokogiri::XML.parse(xml_assertion)
             end
-      logger.debug {"Parsing assertion: \n" + doc.to_xml(:indent => 2).gsub(/^/, "\t")}
+      logger.info {"Parsing assertion: \n" + doc.to_xml(:indent => 2).gsub(/^/, "\t")}
 
+      # We can't use the helpful #issuer_from until the 'asrt' namespace is defined,
+      # but we can't add that definition without breaking signature verification.
+      # This is sad.
+      issuer = doc.at_xpath('//saml2:Assertion/saml2:Issuer', saml2: "urn:oasis:names:tc:SAML:2.0:assertion").text.strip
+      verify(doc) if Saml2::Issuer(issuer).verify_signatures?
 
       doc.root.add_namespace_definition('asrt', 'urn:oasis:names:tc:SAML:2.0:assertion')
 
@@ -84,6 +90,11 @@ module Saml2
 
     def [](attr_name)
       attributes[attr_name.to_s]
+    end
+
+    def self.verify(doc)
+      signed_doc = SignedXml::Document(doc)
+      raise "SAML assertion failed verification" unless signed_doc.is_verified?(SamlSp::CertificateStore)
     end
 
     protected

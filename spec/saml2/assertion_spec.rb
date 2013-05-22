@@ -146,6 +146,9 @@ describe Saml2::Assertion do
         </SOAP-ENV:Body>
         </SOAP-ENV:Envelope> 
       XML
+
+      # register issuer which doesn't require verification
+      Saml2::Issuer.new('https://idp.invalid', false)
     end
 
     def self.it_should_extract(prop, expected_value)

@@ -22,6 +22,8 @@ describe Saml2::ArtifactResolver do
     before do 
       @resolver = Saml2::ArtifactResolver.new('a-source-id', 'https://idp.invalid/resolution-service', 'http://idp.invalid', 'http://sp.invalid')
       @resolver.basic_auth_credentials('myuserid', 'mypasswd', 'myrealm')
+      # register issuer which doesn't require verification
+      Saml2::Issuer.new(@resolver.idp_id, false)
 
       @artifact = Saml2::Type4Artifact.new(0, '01234567890123456789', 'abcdefghijklmnopqrst')
       FakeWeb.register_uri(:post, 'https://idp.invalid/resolution-service', :body => SUCCESSFUL_SAML_RESP)
