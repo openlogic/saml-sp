@@ -1,3 +1,4 @@
+require 'digest'
 require 'logger'
 
 module SamlSp
@@ -56,6 +57,26 @@ module SamlSp
       base.extend(self)
     end
   end
+
+  CertificateStore = Class.new(Hash) do
+    include Logging
+
+    def load_certificates(glob)
+      logger.info "loading certificates from #{glob}"
+      Dir[glob].each do |file|
+        begin
+          next unless File.file?(file)
+          logger.info "reading #{file}"
+          cert = OpenSSL::X509::Certificate.new(File.read(file))
+          fingerprint = Digest::SHA1.hexdigest(cert.to_der)
+          self[fingerprint] = cert
+          logger.info "loaded certificate #{cert.inspect} with fingerprint #{fingerprint}"
+        rescue StandardError => e
+          logger.warn "unable to read X.509 cert from #{file}: #{e.message}"
+        end
+      end
+    end
+  end.new
 
   autoload :Config,    'saml_sp/config'
 end  # module SamlSp

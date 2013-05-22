@@ -201,6 +201,30 @@ describe SamlSp::Config do
     end
   end
 
+  describe "valid issuer description" do
+    before do
+      @dsl = SamlSp::Config.new
+      @issuer = @dsl.interpret(<<-CONFIG)
+          issuer {
+            id "http://sso.example.org"
+            verify_signatures true
+          }
+        CONFIG
+    end
+
+    it "should build an issuer" do 
+      @issuer.should be_kind_of(Saml2::Issuer)
+    end
+
+    it "should build an issuer with correct id" do
+      @issuer.id.should == 'http://sso.example.org'
+    end
+
+    it "should build an issuer with correct verify_signatures setting" do
+      @issuer.verify_signatures?.should be true
+    end
+  end
+
   it "should raise error on missing source_id" do  
     lambda {
       @dsl.interpret(<<-CONFIG)
@@ -285,6 +309,26 @@ describe SamlSp::Config do
               realm    "myssorealm"
               user_id  "myuserid"
             }
+          }
+        CONFIG
+    }.should raise_error SamlSp::ConfigurationError
+  end
+
+  it "should raise error on missing issuer id" do 
+    lambda {
+      @dsl.interpret(<<-CONFIG)
+          issuer {
+            verify_signatures true
+          }
+        CONFIG
+    }.should raise_error SamlSp::ConfigurationError
+  end
+
+  it "should raise error on missing verify_signatures setting" do 
+    lambda {
+      @dsl.interpret(<<-CONFIG)
+          issuer {
+            id "http://sso.example.org"
           }
         CONFIG
     }.should raise_error SamlSp::ConfigurationError
