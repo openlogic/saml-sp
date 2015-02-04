@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = "openlogic-saml-sp"
-  s.version = "4.0.0.alpha.1"
+  s.version = "4.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new("> 1.3.1") if s.respond_to? :required_rubygems_version=
   s.authors = ["OpenLogic", "Peter Williams", "Glen Aultman-Bettridge", "Todd Thomas"]
@@ -47,14 +47,14 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<nokogiri>, [">= 0"])
-      s.add_runtime_dependency(%q<signed_xml>, ["~> 1.0"])
+      s.add_runtime_dependency(%q<signed_xml>, ["~> 1.1"])
       s.add_runtime_dependency(%q<openlogic-resourceful>, [">= 0"])
       s.add_runtime_dependency(%q<uuidtools>, [">= 0"])
       s.add_development_dependency(%q<rspec>, ["~> 2.12"])
       s.add_development_dependency(%q<fakeweb>, [">= 0"])
     else
       s.add_dependency(%q<nokogiri>, [">= 0"])
-      s.add_dependency(%q<signed_xml>, ["~> 1.0"])
+      s.add_dependency(%q<signed_xml>, ["~> 1.1"])
       s.add_dependency(%q<openlogic-resourceful>, [">= 0"])
       s.add_dependency(%q<uuidtools>, [">= 0"])
       s.add_dependency(%q<rspec>, ["~> 2.12"])
@@ -62,7 +62,7 @@ Gem::Specification.new do |s|
     end
   else
     s.add_dependency(%q<nokogiri>, [">= 0"])
-    s.add_dependency(%q<signed_xml>, ["~> 1.0"])
+    s.add_dependency(%q<signed_xml>, ["~> 1.1"])
     s.add_dependency(%q<openlogic-resourceful>, [">= 0"])
     s.add_dependency(%q<uuidtools>, [">= 0"])
     s.add_dependency(%q<rspec>, ["~> 2.12"])
